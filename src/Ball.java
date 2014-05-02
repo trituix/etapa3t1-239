@@ -12,7 +12,7 @@ public class Ball extends PhysicsElement implements SpringAttachable{
    private double a_tMinusDelta;  // acceleration delta time ago;
    private ArrayList<Spring> springs;  // ArrayList can grow, arrays cannot. 
 
-   private Ball(){   // nobody can create a block without state
+   protected Ball(){   // nobody can create a block without state
      this(1.0,0.1,0,0);
    }
    public Ball(double mass, double radius, double position, double speed){
@@ -41,8 +41,6 @@ public class Ball extends PhysicsElement implements SpringAttachable{
    }
    private double getNetForce() {
 	   double sum = 0;
-	   //double my_force = a_t*mass;
-	   //sum += my_force;
 	   for (Spring s: springs) {
 		   sum += s.getForce(this);
 	   }
@@ -51,7 +49,6 @@ public class Ball extends PhysicsElement implements SpringAttachable{
   
    public void attachSpring(Spring s) {
 	   springs.add(s);
-	   //a_t = getNetForce()/mass;
    }
    
 
@@ -64,10 +61,10 @@ public class Ball extends PhysicsElement implements SpringAttachable{
      } else {
     	 a_tMinusDelta = a_t;
     	 a_t= getNetForce()/mass;
-    	 //speed_tPlusDelta = speed_t + 0.5*(3*a_t - a_tMinusDelta)*delta_t;
-    	 speed_tPlusDelta=speed_t + a_t*delta_t;
-    	 //pos_tPlusDelta = pos_t + speed_t*delta_t + (1/6)*(4*a_t - a_tMinusDelta)*delta_t*delta_t;
-         pos_tPlusDelta = pos_t + 0.5*a_t*delta_t*delta_t + speed_t*delta_t;
+    	 speed_tPlusDelta = speed_t + 0.5*(3*a_t - a_tMinusDelta)*delta_t;
+    	 //speed_tPlusDelta=speed_t + a_t*delta_t;
+    	 pos_tPlusDelta = pos_t + speed_t*delta_t + (1/6)*(4*a_t - a_tMinusDelta)*delta_t*delta_t;
+         //pos_tPlusDelta = pos_t + 0.5*a_t*delta_t*delta_t + speed_t*delta_t;
      }
    }
    public boolean collide(Ball b) {

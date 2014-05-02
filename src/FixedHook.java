@@ -8,17 +8,16 @@ public class FixedHook extends PhysicsElement implements SpringAttachable{
 	private ArrayList<Spring> springs;
 	
 	protected FixedHook() {
-		this(1.0, 0.1, 0);
+		this(1.0);
 	}
 	
-	public FixedHook(double mass, double radius, double position) {
+	public FixedHook(double position) {
 		super(id++);
-		this.mass = mass;
+		this.mass = 0;
 		this.pos_t = position;
-		this.radius = radius;
+		this.radius = 0;
 		springs = new ArrayList<Spring>();
 	}
-   // to be coded by you. Think of a Ball that does not move.
 
 	public void attachSpring(Spring s) {
 		springs.add(s);
@@ -29,31 +28,28 @@ public class FixedHook extends PhysicsElement implements SpringAttachable{
 		return this.pos_t;
 	}
 
-	@Override
+	public double getRadius() {
+		return this.radius;
+	}
+	
 	public String getDescription() {
-		// TODO Apéndice de método generado automáticamente
-		return null;
+		return "FixedHook."+this.getId();
 	}
 
-	@Override
 	public String getState() {
-		// TODO Apéndice de método generado automáticamente
-		return null;
+		return String.valueOf(this.pos_t);
 	}
 
-	@Override
 	public void computeNextState(double delta_t, MyWorld myWorld) {
 		// TODO Apéndice de método generado automáticamente
 		
 	}
 
-	@Override
 	public void updateState() {
 		// TODO Apéndice de método generado automáticamente
 		
 	}
 
-	@Override
 	public double getMass() {
 		return this.mass;
 	}
