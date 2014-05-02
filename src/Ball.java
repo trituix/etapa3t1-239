@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Ball extends PhysicsElement {
+public class Ball extends PhysicsElement implements SpringAttachable{
    private static int id=0;  // Ball identification number
    private final double mass;
    private final double radius;
