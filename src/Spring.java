@@ -2,9 +2,9 @@ public class Spring extends PhysicsElement {
    private static int id=0;  // Spring identification
    protected final double restLength;
    private final double stiffness;
-   protected Ball a_end, b_end;
+   protected PhysicsElement a_end, b_end;
 
-   private Spring(){   // nobody can create a block without state
+   protected Spring(){   // nobody can create a block without state
       this(0,0);
    }
    public Spring(double restLength, double stiffness){
@@ -13,7 +13,7 @@ public class Spring extends PhysicsElement {
       this.stiffness = stiffness;
       a_end = b_end = null;
    }
-   public void attachEnd (Ball sa) {  // note: we attach a spring to a ball, 
+   public void attachEnd (PhysicsElement sa) {  // note: we attach a spring to a ball, 
       if(a_end==null)                             //       not the other way around.
          a_end = sa;                     
       else if(b_end == null)
@@ -22,7 +22,13 @@ public class Spring extends PhysicsElement {
     	  System.out.println("Solo puedes unir dos bolas a un resorte");
     	  System.exit(-1);
       }
-      sa.attachSpring(this);
+      if(sa.getClass().equals(Ball.class)) {
+    	  ((Ball) sa).attachSpring(this);
+      }
+      else if(sa.getClass().equals(FixedHook.class)) {
+    	  ((FixedHook) sa).attachSpring(this);
+      }
+      
    }
    
    public double getMass() {
@@ -35,18 +41,48 @@ public class Spring extends PhysicsElement {
    }
    
    public double getAendPosition() {
-      if (a_end != null)
-         return a_end.getPosition()+a_end.getRadius();
-      if (b_end != null)
-         return b_end.getPosition()-restLength;
-      return 0;
+	   double position = 0;
+	   if (a_end != null) {
+		   if(a_end.getClass().equals(Ball.class)) {
+			   position = ((Ball) a_end).getPosition() + ((Ball) a_end).getRadius();
+		   }
+		   else if(a_end.getClass().equals(FixedHook.class)) {
+			   position = ((FixedHook) a_end).getPosition() + ((FixedHook) a_end).getRadius();
+		   }
+		   return position;
+	   }
+	   if (b_end != null) {
+		   if(b_end.getClass().equals(Ball.class)) {
+			   position = ((Ball) b_end).getPosition()-restLength;
+		   }
+		   else if(b_end.getClass().equals(FixedHook.class)) {
+			   position = ((FixedHook) b_end).getPosition()-restLength;
+		   }
+		   return position;
+	   }
+	   return position;
    }
    public double getBendPosition() {
-	   if (b_end != null)
-		   return b_end.getPosition()-b_end.getRadius();
-	   if (a_end != null)
-	       return a_end.getPosition()+restLength;
-	   return 0;
+	   double position = 0;
+	   if (b_end != null) {
+		   if(b_end.getClass().equals(Ball.class)) {
+			   position = ((Ball) b_end).getPosition() - ((Ball) b_end).getRadius();
+		   }
+		   else if(b_end.getClass().equals(FixedHook.class)) {
+			   position = ((FixedHook) b_end).getPosition() - ((FixedHook) b_end).getRadius();
+		   }
+		   return position;
+	   }
+	   if (a_end != null) {
+		   if(a_end.getClass().equals(Ball.class)) {
+			   position = ((Ball) a_end).getPosition()-restLength;
+		   }
+		   else if(a_end.getClass().equals(FixedHook.class)) {
+			   position = ((FixedHook) a_end).getPosition()-restLength;
+		   }
+		   return position;
+	   }
+	   return position;
    }
    
    public double getForce(Ball ball) {
@@ -77,6 +113,6 @@ public class Spring extends PhysicsElement {
       return "Spring_"+ getId()+":a_end\tb_end";
    }
    public String getState() {
-	  return String.valueOf(getAendPosition()) + "\t\t" + String.valueOf(getBendPosition());
+	  return String.valueOf(getAendPosition()) + "\t" + String.valueOf(getBendPosition());
    }
 }
